@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embebidos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+        .card-title {
+            color: #00d9ff;
+            font-weight: 600;
+        }
+        .badge {
+            background: linear-gradient(45deg, #00d9ff, #0099ff) !important;
+        }
+        .form-range {
+            accent-color: #00d9ff;
+        }
+        .btn-outline-primary {
+            border-color: #00d9ff;
+            color: #00d9ff;
+        }
+        .btn-outline-primary:hover {
+            background: #00d9ff;
+            color: #1a1a2e;
+        }
+        .display-6 {
+            color: #00d9ff;
+            font-weight: 700;
+        }
+        hr {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        h3.fw-bold {
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 217, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="d-flex justify-content-center align-items-center vh-100">
+    <div class="container text-center">
+        <h3 class="fw-bold mb-4">Panel de Control</h3>
+        <hr class="mb-4">
+        <div class="row justify-content-center g-4">
+            <div class="col-md-8">
+                <div class="row g-4">
+                    <div class="col-4">
+                        <div class="card text-center h-100">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div>
+                                    <h5 class="card-title">Led 9</h5>
+                                    <span class="badge bg-primary mb-3 d-block" id="ldrLed9"> Brillo: <span id="brilloLed9">50</span></span>
+                                </div>
+                                <div>
+                                    <label for="led9" class="form-label">
+                                        <span id="valorLed9">50</span>
+                                    </label>
+                                    <input type="range" class="form-range slider" id="led9" min="0" max="100" value="50"
+                                        oninput="document.getElementById('valorLed9').innerText = this.value">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card text-center h-100">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div>
+                                    <h5 class="card-title">Led 10</h5>
+                                    <span class="badge bg-primary mb-3 d-block" id="ldrLed10"> Brillo: <span id="brilloLed10">50</span></span>
+                                </div>
+                                <div>
+                                    <label for="led10" class="form-label">
+                                        <span id="valorLed10">50</span>
+                                    </label>
+                                    <input type="range" class="form-range slider" id="led10" min="0" max="100" value="50"
+                                        oninput="document.getElementById('valorLed10').innerText = this.value">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card text-center h-100">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div>
+                                    <h5 class="card-title">Led 11</h5>
+                                    <span class="badge bg-primary mb-3 d-block" id="ldrLed11"> Brillo: <span id="brilloLed11">50</span></span>
+                                </div>
+                                <div>
+                                    <label for="led11" class="form-label">
+                                        <span id="valorLed11">50</span>
+                                    </label>
+                                    <input type="range" class="form-range slider" id="led11" min="0" max="100" value="50"
+                                        oninput="document.getElementById('valorLed11').innerText = this.value">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row g-4">
+                    <div class="col-12">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Led 13</h5>
+                                <input type="checkbox" class="btn-check" id="led13" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="led13">Encender</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Intensidad LDR</h5>
+                                <p class="display-6" id="valorLDR">50</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="/static/script.js"></script>
+</body>
+</html>
+
