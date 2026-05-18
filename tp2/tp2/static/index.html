@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Intensidad Luminosa</title>
+
+    <style>
+        :root {
+            --bg-start: #0f172a;
+            --bg-end: #1e293b;
+            --card-bg: rgba(255, 255, 255, 0.06);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.3);
+            --green: #4ade80;
+            --red: #f87171;
+            --red-glow: rgba(248, 113, 113, 0.4);
+            --font: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font);
+            background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 48px 40px 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-2px);
+        }
+
+        h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: 0.02em;
+            margin-bottom: 32px;
+        }
+
+        .sensor-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sensor-label {
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .sensor {
+            font-size: 56px;
+            font-weight: 700;
+            color: var(--accent);
+            transition: color 0.4s ease;
+            text-shadow: 0 0 40px var(--accent-glow);
+            line-height: 1.2;
+        }
+
+        .sensor-unit {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-left: 2px;
+        }
+
+        .status {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .status-dot.active {
+            background: var(--green);
+            box-shadow: 0 0 12px rgba(74, 222, 128, 0.5);
+        }
+
+        .status-dot.inactive {
+            background: var(--text-secondary);
+        }
+
+        .alarm {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.4s ease;
+            margin-bottom: 28px;
+            min-height: 48px;
+        }
+
+        .alarm.off {
+            background: rgba(74, 222, 128, 0.1);
+            color: var(--green);
+            border: 1px solid rgba(74, 222, 128, 0.2);
+        }
+
+        .alarm.on {
+            background: rgba(248, 113, 113, 0.1);
+            color: var(--red);
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            animation: alarmPulse 1.2s ease-in-out infinite;
+        }
+
+        @keyframes alarmPulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 var(--red-glow);
+            }
+            50% {
+                box-shadow: 0 0 20px 4px var(--red-glow);
+            }
+        }
+
+        .alarm-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+            transition: background 0.3s ease;
+        }
+
+        .alarm.off .alarm-indicator {
+            background: var(--green);
+        }
+
+        .alarm.on .alarm-indicator {
+            background: var(--red);
+            animation: indicatorPulse 1.2s ease-in-out infinite;
+        }
+
+        @keyframes indicatorPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: var(--font);
+            letter-spacing: 0.01em;
+        }
+
+        .start {
+            background: var(--green);
+            color: #052e16;
+        }
+
+        .start:hover {
+            background: #6ee7a0;
+            box-shadow: 0 4px 20px rgba(74, 222, 128, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .start:active {
+            transform: translateY(0);
+        }
+
+        .stop {
+            background: var(--red);
+            color: #450a0a;
+        }
+
+        .stop:hover {
+            background: #fca5a5;
+            box-shadow: 0 4px 20px rgba(248, 113, 113, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .stop:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Intensidad Luminosa</h1>
+
+        <div class="sensor-card">
+            <div class="sensor-label">Valor del LDR</div>
+            <div class="sensor" id="valorLuz">0</div>
+        </div>
+
+        <div class="status">
+            <span class="status-dot inactive" id="statusDot"></span>
+            Lectura: <span id="estadoLectura">DETENIDA</span>
+        </div>
+
+        <div id="alarma" class="alarm off">
+            <span class="alarm-indicator"></span>
+            <span id="alarmaTexto">Normal</span>
+        </div>
+
+        <div class="buttons">
+            <button class="start" onclick="iniciarLectura()">Iniciar lectura</button>
+            <button class="stop" onclick="detenerLectura()">Detener lectura</button>
+        </div>
+
+    </div>
+
+    <script>
+
+        function iniciarLectura() {
+            fetch("/start");
+            document.getElementById("estadoLectura").innerText = "ACTIVA";
+            document.getElementById("statusDot").className = "status-dot active";
+        }
+
+        function detenerLectura() {
+            fetch("/stop");
+            document.getElementById("estadoLectura").innerText = "DETENIDA";
+            document.getElementById("statusDot").className = "status-dot inactive";
+            document.getElementById("alarma").className = "alarm off";
+            document.getElementById("alarmaTexto").innerText = "Normal";
+        }
+
+        setInterval(() => {
+
+            fetch("/valor")
+                .then(res => res.json())
+                .then(data => {
+
+                    document.getElementById("estadoLectura").innerText = data.readActivated ? "ACTIVA" : "DETENIDA";
+                    document.getElementById("statusDot").className = data.readActivated ? "status-dot active" : "status-dot inactive";
+
+                    if (data.readActivated) {
+                        document.getElementById("valorLuz").innerText = data.ldrValue;
+                    }
+
+                    let alarma = document.getElementById("alarma");
+                    let alarmaTexto = document.getElementById("alarmaTexto");
+                    if (data.alarm) {
+                        alarma.className = "alarm on";
+                        alarmaTexto.innerText = "ALARMA: luz mayor a 800";
+                    } else {
+                        alarma.className = "alarm off";
+                        alarmaTexto.innerText = "Normal";
+                    }
+                });
+
+        }, 3000);
+
+    </script>
+
+</body>
+
+</html>
